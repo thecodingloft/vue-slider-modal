@@ -3,6 +3,7 @@
     
     <div class="course__category">
       <h1 class="category__heading">International Cuisine</h1>
+      <h1>Test branch</h1>
     </div>
 
     <!-- Category: International Cuisine -->
