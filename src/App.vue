@@ -1,18 +1,22 @@
 <template>
   <section class="course__slider">
+
+
+    <!-- Start Test Slider -->
+
+    <!-- End Test Slider -->
     
     <div class="course__category">
       <h1 class="category__heading">International Cuisine</h1>
-      <h1>Test branch</h1>
     </div>
 
     <!-- Category: International Cuisine -->
-    <div class="category__slider">
+    <div class="category__slider mySlider">
       <div class="slider__container">
 
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
-              <li class="course__slide list-item" v-for="course in coursesInternationalComputed" :key="course.id">
+              <li class="course__slide list-item" v-for="course in coursesInternational" :key="course.id">
                 <a class="list" href="#" @click='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
                 </a>
@@ -39,7 +43,7 @@
 
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
-              <li class="course__slide list-item" v-for="course in coursesPastryComputed" :key="course.id">
+              <li class="course__slide list-item" v-for="course in coursesPastry" :key="course.id">
                 <a class="list" href="#" @click='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
                 </a>
@@ -66,7 +70,7 @@
 
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
-              <li class="course__slide list-item" v-for="course in coursesSpecialtyComputed" :key="course.id">
+              <li class="course__slide list-item" v-for="course in coursesSpecialty" :key="course.id">
                 <a class="list" href="#" @click='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
                 </a>
@@ -129,10 +133,9 @@ export default {
 
   async mounted () {
 
-    fetch('https://gist.githubusercontent.com/veecoco/0653f11aac43c1dc61c0fada39517545/raw/2593b138111b2b962db6c2f03bbf0518a143cc8e/course-info.json')
+    await fetch('https://gist.githubusercontent.com/veecoco/0653f11aac43c1dc61c0fada39517545/raw/2593b138111b2b962db6c2f03bbf0518a143cc8e/course-info.json')
       .then(res => res.json())
       .then(data => {
-        //this.courses = data
         this.coursesInternational = data.filter((course) => {
           return course.category === 'international'
         })
@@ -145,8 +148,18 @@ export default {
         })
       .catch(err => console.log(err.message))
 
+    console.log(this.coursesInternational)
+
+    const slides = document.querySelectorAll(
+    console.log(slides)
+
+    slides.forEach((slide) => {
+      slide.addEventListener('mousedown', () => {
+        console.log('mouse')
+      })
+    })
   },
-  
+
   methods: {
     openModal: function(course) {
       var modalWrapper = document.querySelector('.modal__wrapper')
@@ -171,7 +184,7 @@ export default {
       var widthStep 
       // move the inner container to the left so the first slide moves left, too
       innerContainers = document.querySelectorAll(".inner")
-      widthStep = this.cardWidth * (-1)
+      widthStep = this.cardWidth * (-2)
       innerContainers.forEach((container) => {
         container.style.transform = `translateX(${widthStep}px)`
       })
@@ -224,34 +237,11 @@ export default {
         setTimeout(() => this.coursesSpecialty.unshift(addedSlide))
 
       }
+    },
+    setupTouch: function() {
+      console.log('touch setup')
     }
   },
-
-  computed: {
-    coursesUpdated: {
-      get: function() {
-        console.log('get computed property')
-        return this.courses
-      },
-      set: function(array) {
-        console.log('set computed property')
-       this.courses = array  
-      }
-    },
-    coursesInternationalComputed: {
-      get: function() {
-        return this.coursesInternational
-    }},
-    coursesPastryComputed: {
-      get: function() {
-        return this.coursesPastry
-    }} ,
-    coursesSpecialtyComputed: {
-      get: function() {
-        return this.coursesSpecialty
-      }
-    }
-  }
 }
 
 
@@ -464,45 +454,6 @@ export default {
   transition: all .4s ease-out;
 }
 
-/* Swiper */
-
-.swiper {
-        width: 100%;
-        height: 100%;
-      }
-
-.swiper-slide {
-        text-align: center;
-        font-size: 18px;
-        background: #fff;
-
-        /* Center slide text vertically */
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        -webkit-align-items: center;
-        align-items: center;
-      }
-
-.swiper-slide img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-.swiper {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
 
 /* Mobile Adjustment */
 
@@ -553,6 +504,15 @@ export default {
   .modal__image {
     max-width: 90%;
   }
+}
+
+/* TESTING SLIDER STUFF */
+
+#myElement {
+  background: silver;
+  height: 300px;
+  text-align: center;
+  font: 30px/300px Helvetica, Arial, sans-serif;
 }
 
 </style>
