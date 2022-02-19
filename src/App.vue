@@ -1,4 +1,5 @@
 <template>
+  <section class="empty_space"></section>
   <section class="course__slider">
     
     <div class="course__category">
@@ -12,9 +13,9 @@
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
               <li class="course__slide list-item" v-for="course in coursesInternationalComputed" :key="course.id">
-                <a class="list" href="#" @click='openModal(course)'>
+                <div class="list" @click.passive='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
-                </a>
+                </div>
               </li>
             </transition-group>
 
@@ -39,7 +40,7 @@
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
               <li class="course__slide list-item" v-for="course in coursesPastryComputed" :key="course.id">
-                <a class="list" href="#" @click='openModal(course)'>
+                <a class="list" href="#!" @click='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
                 </a>
               </li>
@@ -66,7 +67,7 @@
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
               <li class="course__slide list-item" v-for="course in coursesSpecialtyComputed" :key="course.id">
-                <a class="list" href="#" @click='openModal(course)'>
+                <a class="list" href="javascript" @click='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
                 </a>
               </li>
@@ -84,7 +85,7 @@
 
    
     <!-- Modal Box -->
-    <div class="modal__wrapper" @click="closeModal()">
+    <div class="modal__wrapper">
       <div class="modal__box">
       <a href="#" @click='closeModal'>X</a>
       <img class="modal__image" v-bind:src=selectedCourseImage alt="">
@@ -108,6 +109,7 @@ export default {
   name: 'App',
   data() {
     return {
+      scrollStart: 0,
       showModal: false,
       selectedCourse: {},
       selectedCourseImage: "",
@@ -128,10 +130,9 @@ export default {
 
   async mounted () {
 
-    fetch('https://gist.githubusercontent.com/veecoco/0653f11aac43c1dc61c0fada39517545/raw/2593b138111b2b962db6c2f03bbf0518a143cc8e/course-info.json')
+    await fetch('https://gist.githubusercontent.com/veecoco/0653f11aac43c1dc61c0fada39517545/raw/2593b138111b2b962db6c2f03bbf0518a143cc8e/course-info.json')
       .then(res => res.json())
       .then(data => {
-        //this.courses = data
         this.coursesInternational = data.filter((course) => {
           return course.category === 'international'
         })
@@ -144,13 +145,40 @@ export default {
         })
       .catch(err => console.log(err.message))
 
+    const lists = document.querySelectorAll('.list')
+    lists.forEach((list) => {
+      list.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation()
+      })
+    })
+
   },
   
   methods: {
     openModal: function(course) {
+
+      const fromTop = window.scrollY + this.scrollStart
+      const courseSlider = document.querySelector('.course__slider')
+
+      // set the course slider width to 100vh to prevent moving
+      courseSlider.style.width = '100vw'
+
+      // setting the body to stay fixed to current position
+      
+      //document.body.style.top = `-${fromTop}px`;
+      //document.body.style.overflow = 'hidden'
+      //document.body.style.position = 'fixed';
+
       var modalWrapper = document.querySelector('.modal__wrapper')
+      //modalWrapper.style.top = `${fromTop}px`
       modalWrapper.style.visibility = 'visible'
       
+
+      // continue: prevent the body to reload again
+
+      
+      // dynamically fill the properties shown in the modal
       this.selectedCourse = course
       this.selectedCourseImage = course.image
       this.selectedCourseName = course.name
@@ -158,19 +186,39 @@ export default {
       this.selectedCourseDifficulty = course.difficulty
       this.selectedCourseRecipes = course.recipes
 
+      // set the scrollstar to from top position
+      this.scrollStart = fromTop
+
+    // closing the window when clicking outside
+    window.onclick = function(event) {
+      if(event.target.className == 'modal__wrapper') {
+        modalWrapper.style.visibility = 'hidden'
+        document.body.style.position = 'relative';
+        //document.body.style.top = `-${fromTop}px`;
+        document.body.style.overflow = ''
+        console.log(document.body)
+
+        //document.body = body
+      }
+    }
+
     },
+    
     closeModal: function() {
       
       var modalWrapper = document.querySelector('.modal__wrapper')
-      modalWrapper.style.visibility = 'hidden'
+        modalWrapper.style.visibility = 'hidden'
+        document.body.style.position = 'relative';
+        document.body.style.overflow = 'auto'
 
     },
+
     setStep: function() {
       var innerContainers
       var widthStep 
       // move the inner container to the left so the first slide moves left, too
       innerContainers = document.querySelectorAll(".inner")
-      widthStep = this.cardWidth * (-1)
+      widthStep = this.cardWidth * (-1.5)
       innerContainers.forEach((container) => {
         container.style.transform = `translateX(${widthStep}px)`
       })
@@ -257,6 +305,10 @@ export default {
 </script>
 
 <style>
+body {
+   padding-right: 15px;
+}
+
 #app {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -298,6 +350,12 @@ export default {
   box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, .4);
 }
 
+.empty_space {
+  height: 40vh;
+  width: 100vw;
+  background: #333
+}
+
 .course__slider {
   background: rgb(242, 242, 242);
   padding-top: 20px;
@@ -333,7 +391,7 @@ export default {
   content: "";
   position: absolute;
   top: 0;
-  width: 25%;
+  width: 10%;
   height: 100%;
   z-index: 5;
 }
@@ -406,7 +464,7 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: left;
-  top: 0;
+  top: 0px;
   left: 0;
   background: rgba(192,192,192, 0.5);
   width: 100vw;
@@ -415,6 +473,7 @@ export default {
 }
 
 .modal__box {
+  position: relative;
   background: white;
   display: inline;
   flex-direction: vertical;
