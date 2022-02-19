@@ -1,19 +1,20 @@
 <template>
-  <section class="empty_space"></section>
+
   <section class="course__slider">
-    
+
+    <h1 class="slider__heading">Browse Our Courses</h1>
+
+    <!-- Category: International Cuisine -->
     <div class="course__category">
       <h1 class="category__heading">International Cuisine</h1>
     </div>
-
-    <!-- Category: International Cuisine -->
     <div class="category__slider">
       <div class="slider__container">
 
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
-              <li class="course__slide list-item" v-for="course in coursesInternationalComputed" :key="course.id">
-                <div class="list" @click.passive='openModal(course)'>
+              <li class="course__slide list-item" v-for="course in coursesInternational" :key="course.id">
+                <div class="list" @click='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
                 </div>
               </li>
@@ -25,24 +26,21 @@
           <button class="slider__button btn--custom btn--white next" @click="changeSlideInternational(1)">&#10095;</button>
       
       </div>
-      
-
-    </div>
-
-    <div class="course__category">
-    <h1 class="category__heading">Pastry & Baking</h1>
     </div>
 
     <!-- Category: Pastry & Baking -->
+    <div class="course__category">
+      <h1 class="category__heading">Pastry & Baking</h1>
+    </div>
     <div class="category__slider">
       <div class="slider__container">
 
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
-              <li class="course__slide list-item" v-for="course in coursesPastryComputed" :key="course.id">
-                <a class="list" href="#!" @click='openModal(course)'>
+              <li class="course__slide list-item" v-for="course in coursesPastry" :key="course.id">
+                <div class="list" @click='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
-                </a>
+                </div>
               </li>
             </transition-group>
 
@@ -52,24 +50,22 @@
           <button class="slider__button btn--custom btn--white next" @click="changeSlidePastry(1)">&#10095;</button>
       
       </div>
-      
-
     </div>
 
-    <div class="course__category">
-    <h1 class="category__heading">Special Topics</h1>
-    </div>
 
     <!-- Category: Specialty Courses -->
+    <div class="course__category">
+      <h1 class="category__heading">Special Topics</h1>
+    </div>
     <div class="category__slider">
       <div class="slider__container">
 
           <div class="inner" ref="inner">
             <transition-group tag="ul" name="list" appear mode="out-in">
-              <li class="course__slide list-item" v-for="course in coursesSpecialtyComputed" :key="course.id">
-                <a class="list" href="javascript" @click='openModal(course)'>
+              <li class="course__slide list-item" v-for="course in coursesSpecialty" :key="course.id">
+                <div class="list" @click='openModal(course)'>
                   <img v-bind:src=course.image v-bind:alt=course.name>
-                </a>
+                </div>
               </li>
             </transition-group>
 
@@ -87,7 +83,7 @@
     <!-- Modal Box -->
     <div class="modal__wrapper">
       <div class="modal__box">
-      <a href="#" @click='closeModal'>X</a>
+      <a href="#" @click.prevent='closeModal'>X</a>
       <img class="modal__image" v-bind:src=selectedCourseImage alt="">
       <h1> {{ selectedCourseName }}</h1>
       <h4 class="italic"> {{selectedCourseDescription}} </h4>
@@ -145,38 +141,18 @@ export default {
         })
       .catch(err => console.log(err.message))
 
-    const lists = document.querySelectorAll('.list')
-    lists.forEach((list) => {
-      list.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation()
-      })
-    })
-
   },
   
   methods: {
     openModal: function(course) {
 
-      const fromTop = window.scrollY + this.scrollStart
       const courseSlider = document.querySelector('.course__slider')
 
       // set the course slider width to 100vh to prevent moving
       courseSlider.style.width = '100vw'
 
-      // setting the body to stay fixed to current position
-      
-      //document.body.style.top = `-${fromTop}px`;
-      //document.body.style.overflow = 'hidden'
-      //document.body.style.position = 'fixed';
-
       var modalWrapper = document.querySelector('.modal__wrapper')
-      //modalWrapper.style.top = `${fromTop}px`
       modalWrapper.style.visibility = 'visible'
-      
-
-      // continue: prevent the body to reload again
-
       
       // dynamically fill the properties shown in the modal
       this.selectedCourse = course
@@ -186,19 +162,10 @@ export default {
       this.selectedCourseDifficulty = course.difficulty
       this.selectedCourseRecipes = course.recipes
 
-      // set the scrollstar to from top position
-      this.scrollStart = fromTop
-
     // closing the window when clicking outside
     window.onclick = function(event) {
       if(event.target.className == 'modal__wrapper') {
         modalWrapper.style.visibility = 'hidden'
-        document.body.style.position = 'relative';
-        //document.body.style.top = `-${fromTop}px`;
-        document.body.style.overflow = ''
-        console.log(document.body)
-
-        //document.body = body
       }
     }
 
@@ -208,9 +175,6 @@ export default {
       
       var modalWrapper = document.querySelector('.modal__wrapper')
         modalWrapper.style.visibility = 'hidden'
-        document.body.style.position = 'relative';
-        document.body.style.overflow = 'auto'
-
     },
 
     setStep: function() {
@@ -273,32 +237,6 @@ export default {
       }
     }
   },
-
-  computed: {
-    coursesUpdated: {
-      get: function() {
-        console.log('get computed property')
-        return this.courses
-      },
-      set: function(array) {
-        console.log('set computed property')
-       this.courses = array  
-      }
-    },
-    coursesInternationalComputed: {
-      get: function() {
-        return this.coursesInternational
-    }},
-    coursesPastryComputed: {
-      get: function() {
-        return this.coursesPastry
-    }} ,
-    coursesSpecialtyComputed: {
-      get: function() {
-        return this.coursesSpecialty
-      }
-    }
-  }
 }
 
 
@@ -306,7 +244,8 @@ export default {
 
 <style>
 body {
-   padding-right: 15px;
+  padding: 0;
+  margin: 0;
 }
 
 #app {
@@ -350,15 +289,16 @@ body {
   box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, .4);
 }
 
-.empty_space {
-  height: 40vh;
-  width: 100vw;
-  background: #333
+.slider__heading {
+  font-size: 2rem;
+  color: #de8311
 }
 
 .course__slider {
   background: rgb(242, 242, 242);
-  padding-top: 20px;
+  background: white;
+  padding-top: 30px;
+  padding-bottom: 30px;
   overflow: hidden;
   position: relative;
 }
@@ -371,7 +311,7 @@ body {
   display: inline-flex;
   overflow: hidden;
   text-align: center;
-  max-width: 90%;
+  max-width: 100%;
   padding-top: 0px;
 }
 
@@ -381,8 +321,10 @@ body {
   position: relative;
   overflow: hidden;
   max-width: 100%;
-  background: rgb(156,156,156);
-  background: radial-gradient(circle, rgba(156,156,156,1) 0%, rgba(56,56,56,1) 0%, rgba(156,156,156,1) 100%);
+  -webkit-box-shadow: 0 0 5px 0px rgba(0,0,0,.2) inset;
+  -moz-box-shadow: 0 0 5px 0px rgba(0,0,0,.2) inset;
+  box-shadow: 0 0 15px 0px rgba(0,0,0,.2) inset;
+  background: #f2f2f2;
 }
 
 .slider__container::before,
@@ -423,12 +365,18 @@ body {
   background: white;
   border-radius: 10px;
   width: 350px;
-  box-shadow: 1 10 10 10 rgba(0,0,0,1);
+  box-shadow: 0px 5px 15px 0px rgba(0,0,0,.3);
+}
+
+.course__slide img {
+  width: 100%;
+  border-radius:10px;
 }
 
 .course__slide:hover,
 .course__slide:focus {
-  transform: scale(1.02)
+  transform: scale(1.02);
+  cursor: pointer;
 }
 
 .course__slide a {
@@ -563,6 +511,12 @@ body {
 
 
 /* Mobile Adjustment */
+
+@media (min-width: 1800px) {
+  .category__slider {
+    max-width: 90%
+  }
+}
 
 @media (max-width: 768px) {
   .course__slide {
