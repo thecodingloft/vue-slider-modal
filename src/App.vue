@@ -83,15 +83,20 @@
     <!-- Modal Box -->
     <div class="modal__wrapper">
       <div class="modal__box">
-      <a class="modal__btn--close" href="#" @click.prevent='closeModal'>&#935</a>
-      <img class="modal__image" v-bind:src=selectedCourseImage alt="">
-      <h1> {{ selectedCourseName }}</h1>
-      <h4 class="italic"> {{selectedCourseDescription}} </h4>
-      <p class="bold primary">Difficulty</p>
-      <p class="italic"> {{selectedCourseDifficulty}} </p>
-      <p class="bold primary">Recipes included </p>
-      <p class="italic"> {{ selectedCourseRecipes }}</p>
-      <button class="btn--custom btn--primary" href="">Sign Up Now</button>
+      <a class="modal__btn--close" href="#" @click.prevent='closeModal'>&#935;</a>
+      <div class="modal__box--image">
+        <img class="modal__image" v-bind:src=selectedCourseImage alt="">
+      </div>
+      <div class="modal__box--info">
+        <h1> {{ selectedCourseName }}</h1>
+        <h4 class="italic"> {{selectedCourseDescription}} </h4>
+        <p class="bold primary">Difficulty</p>
+        <p class="italic"> {{selectedCourseDifficulty}} </p>
+        <p class="bold primary">Recipes included </p>
+        <p class="italic"> {{ selectedCourseRecipes }}</p>
+        <a class="modal__btn--submit btn--custom btn--primary" href="#" @click="closeModal">Sign Up Now</a>
+      </div>
+
       </div>
     </div>
     
@@ -425,44 +430,61 @@ body {
 .modal__box {
   position: relative;
   background: white;
-  display: inline;
-  flex-direction: vertical;
+  display: flex;
+  flex-direction: column;
   position: relative;
   padding: 20px;
+  padding-bottom: 30px;
   border-radius: 10px;
   min-width: 25%;
   max-width: 35%;
   z-index: 50;
+  box-shadow: 0px 0px 20px 5px rgba(0,0,0,.1)
+}
+
+.modal__box--info {
+  padding: 0px 10px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.modal__box--info p,
+.modal__box--info h1,
+.modal__box--info h4 {
+  padding: 0px;
+  margin-bottom: 5px
 }
 
 .modal__image {
   width: 100%;
 }
 
-.modal__box a {
+.modal__btn--close {
   text-decoration: none;
-  position: absolute;
+  align-self: flex-end;
   right: 10px;
   top: 10px;
+  font-size: 1.2rem;
+  color: #2c3e50;
 }
 
-.modal__box a:hover {
-  text-decoration: underline;
-  color: #de8311;
+.modal__btn--close:hover {
+  cursor: pointer;
 }
-.modal__btn--close {
-  width: 20px;
-  height: 20px;
-  background: #fff;
-  margin: auto;
-  color: #2c3e50;
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,.2);
-  display: inline-flex;
-  flex-direction: column;
-  padding: 10px;
-  border-radius: 100%;
-  align-items: center;
-  justify-content: center;
+
+.modal__btn--submit {
+  text-decoration: none;
+  align-self: center;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+.modal__btn--submit:hover {
+  cursor: pointer;
 }
 
 /* Transition styles */
