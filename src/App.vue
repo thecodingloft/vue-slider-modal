@@ -83,7 +83,7 @@
     <!-- Modal Box -->
     <div class="modal__wrapper">
       <div class="modal__box">
-      <a href="#" @click.prevent='closeModal'>X</a>
+      <a class="modal__btn--close" href="#" @click.prevent='closeModal'>&#935</a>
       <img class="modal__image" v-bind:src=selectedCourseImage alt="">
       <h1> {{ selectedCourseName }}</h1>
       <h4 class="italic"> {{selectedCourseDescription}} </h4>
@@ -258,6 +258,8 @@ body {
   padding: 0;
   margin: 0;
 }
+
+/* START CSS: COURSE SLIDER*/
 
 .bold {
   font-weight: bold;
@@ -448,6 +450,20 @@ body {
   text-decoration: underline;
   color: #de8311;
 }
+.modal__btn--close {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  margin: auto;
+  color: #2c3e50;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,.2);
+  display: inline-flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 100%;
+  align-items: center;
+  justify-content: center;
+}
 
 /* Transition styles */
 
@@ -566,6 +582,8 @@ body {
     max-width: 90%;
   }
 }
+
+/* END CSS: COURSE SLIDER*/
 
 </style>
 
